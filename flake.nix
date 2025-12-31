@@ -10,13 +10,8 @@
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [ "x86_64-linux" ];
 
-      perSystem = { self', inputs', system, ... }: let
-        pkgs = import inputs.nixpkgs {
-          inherit system;
-        };
-        mkShell = pkgs.mkShell.override { stdenv = pkgs.stdenvNoCC; };
-      in {
-        devShells.default = mkShell {
+      perSystem = { self', inputs', pkgs, ... }: {
+        devShells.default = pkgs.mkShellNoCC {
           packages = with pkgs; [
             jdk21
             nodejs
